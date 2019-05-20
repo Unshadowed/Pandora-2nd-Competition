@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask,send_file,render_template
+import json
 
 
 def create_app():
@@ -18,6 +19,7 @@ def create_app():
         """
         以此项目中的404.html作为此Web Server工作时的404错误页
         """
+        return render_template("404.html")
         pass
 
     # TODO: 完成接受 HTTP_URL 的 picture_reshape
@@ -42,7 +44,28 @@ def create_app():
             "base64_picture": <图片reshape后的base64编码: str>
         }
         """
-        import PIL
+        from PIL import Image
+        import base64
+        import hashlib
+        data = open("img.txt","r").read()
+        image = base64.b64decode(data)
+        filename = 'image.png'
+        with open(filename, 'wb') as f:
+            f.write(image)
+        img =Image.open("image.png","r")
+        img = img.resize((100, 100), Image.ANTIALIAS)
+        filename_re = 'image_re.png'
+        with open(filename_re, 'wb') as f:
+            f.write(img)
+        with open(filename_re,"r") as f:
+            base64_data = base64.b64encode(f.read())
+            md5_data = hashlib.md5(f.read())
+
+        res = {"md5":md5_data , "base64_picture":base64_data}
+        js= json.dumps(res)
+        return js
+
+
         pass
 
     # TODO: 爬取 996.icu Repo，获取企业名单
