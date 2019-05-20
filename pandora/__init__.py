@@ -82,6 +82,9 @@ def create_app():
             "description": <description 描述>
         }, ...]
         """
+        import requests
+        url = "github.com/996icu/996.ICU"
+        
         pass
 
     return app
